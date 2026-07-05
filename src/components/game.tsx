@@ -1,18 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import Score from "./score.tsx";
-import Timer from "./timer.tsx";
-import WordInput from "./wordInput.tsx";
-import WordChain from "./wordChain.tsx";
-import GameOver from "./gameOver.tsx";
 import wordService from "../services/wordService.ts";
 import normalizeWord from "../utils/normalizedWord.ts";
 import useTimer from "../hooks/useTimer.tsx"
+import GameOverView from "../views/GameOverView.tsx";
+import GameView from "../views/GameView.tsx";
 
 export default function Game() {
 
     const [score, setScore] = useState(0);
     const [words, setWords] = useState<string[]>([]);
-    const [error, setError] = useState<String | null>(null);
+    const [error, setError] = useState<string | null>(null);
     const [gameOver, setGameOver] = useState(false);
 
     const gameOverRef = useRef(false);
@@ -91,51 +88,24 @@ export default function Game() {
     };
     
     return (
-    <div className="min-h-screen bg-slate-100 flex items-center justify-center p-6">
-      <div className="w-full max-w-2xl bg-white rounded-2xl shadow-xl p-6 space-y-6">
-
-        {/* HEADER */}
-        <header className="text-center space-y-1">
-          <h1 className="text-3xl font-bold text-slate-800">
-            Palabras Encadenadas
-          </h1>
-          <p className="text-slate-500">
-            Formá la cadena más larga posible
-          </p>
-        </header>
-
-        {/* SCORE + TIMER */}
-        <div className="flex justify-between items-center">
-          <Score score={score} />
-          <Timer timeLeft={timeLeft} />
-        </div>
-
-        {/* INPUT */}
-        <WordInput
-          onSubmit={handleWordSubmit}
-          disabled={gameOver}
-        />
-
-        {/* ERROR */}
-        {error && (
-          <div className="text-red-500 text-sm font-medium">
-            {error}
-          </div>
-        )}
-
-        {/* CHAIN */}
-        <WordChain words={words} />
-            
-        {/* GAME OVER */}
-        {gameOver && (
-          <GameOver
+      <div className="min-h-screen bg-slate-100 flex items-center justify-center p-6">
+        {gameOver ? (
+          <GameOverView
             score={score}
-            wordsCount={words.length}
+            words={words}
             onRestart={resetGame}
           />
+        ) : (
+          <GameView
+            score={score}
+            words={words}
+            error={error}
+            timeLeft={timeLeft}
+            onSubmit={handleWordSubmit}
+            resetTimer={resetTimer}
+            onGameOver={handleGameOver}
+          />
         )}
-
-      </div>
     </div>
   );
 }
