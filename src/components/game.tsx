@@ -1,19 +1,69 @@
 import { useState } from "react";
-
 import Score from "./score.tsx";
 import Timer from "./timer.tsx";
 import WordInput from "./wordInput.tsx";
 import WordChain from "./wordChain.tsx";
 import GameOver from "./gameOver.tsx";
+import wordService from "../services/wordService.ts";
+import normalizeWord from "../utils/normalizedWord.ts";
 
 export default function Game() {
 
-    const [score] = useState(0);
-    const [timeLeft] = useState(15);
-    const [words] = useState<string[]>([]);
-    const [error] = useState<String | null>(null);
-    const [gameOver] = useState(false);
+    const [score, setScore] = useState(0);
+    const [timeLeft, setTimeLeft] = useState(15);
+    const [words, setWords] = useState<string[]>([]);
+    const [error, setError] = useState<String | null>(null);
+    const [gameOver, setGameOver] = useState(false);
 
+
+    const handleWordSubmit = async (word: string) => {
+      try {
+        const normalizedWord = normalizeWord(word);
+
+        await validateWordExists(normalizedWord);
+        validateRepeatedWord(normalizedWord);
+        validateWordChain(normalizedWord);
+
+        setWords(previous => [...previous, normalizedWord]);
+        setScore(previous => previous + normalizedWord.length);
+        setTimeLeft(15);
+        setError(null);
+
+      } catch (error) {
+        setError(
+            error instanceof Error
+                ? error.message
+                : "Ocurrió un error inesperado."
+        );
+      }
+    }
+
+    const validateWordExists = async (word: string) => {
+      const validation = await wordService.validate(word);
+
+      if (!validation.exists) {
+          throw new Error("La palabra no existe.");
+      }
+    };
+
+    const validateRepeatedWord = (word: string) => {
+      if (words.includes(word)) {
+          throw new Error("La palabra ya fue utilizada.");
+      }
+    };
+
+    const validateWordChain = (word: string) => {
+      const lastWord = words.at(-1);
+
+      if (!lastWord) return;
+
+      const lastLetter = lastWord.at(-1)!;
+
+      if (!word.startsWith(lastLetter)) {
+        throw new Error("La palabra no respeta la cadena.");
+      }
+    };
+    
     return (
     <div className="min-h-screen bg-slate-100 flex items-center justify-center p-6">
       <div className="w-full max-w-2xl bg-white rounded-2xl shadow-xl p-6 space-y-6">
@@ -36,7 +86,7 @@ export default function Game() {
 
         {/* INPUT */}
         <WordInput
-          onSubmit={() => {}}
+          onSubmit={handleWordSubmit}
           disabled={gameOver}
         />
 
