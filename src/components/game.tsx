@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Score from "./score.tsx";
 import Timer from "./timer.tsx";
 import WordInput from "./wordInput.tsx";
@@ -6,17 +6,24 @@ import WordChain from "./wordChain.tsx";
 import GameOver from "./gameOver.tsx";
 import wordService from "../services/wordService.ts";
 import normalizeWord from "../utils/normalizedWord.ts";
+import useTimer from "../hooks/useTimer.tsx"
 
 export default function Game() {
 
     const [score, setScore] = useState(0);
-    const [timeLeft, setTimeLeft] = useState(15);
     const [words, setWords] = useState<string[]>([]);
     const [error, setError] = useState<String | null>(null);
     const [gameOver, setGameOver] = useState(false);
 
+    const gameOverRef = useRef(false);
+    const isRunning = !gameOver && words.length > 0;
+
+    useEffect(() => {
+      gameOverRef.current = gameOver;
+    }, [gameOver]);
 
     const handleWordSubmit = async (word: string) => {
+      if (gameOverRef.current) return;
       try {
         const normalizedWord = normalizeWord(word);
 
@@ -24,9 +31,10 @@ export default function Game() {
         validateRepeatedWord(normalizedWord);
         validateWordChain(normalizedWord);
 
+        if (gameOverRef.current) return;
         setWords(previous => [...previous, normalizedWord]);
         setScore(previous => previous + normalizedWord.length);
-        setTimeLeft(15);
+        resetTimer();
         setError(null);
 
       } catch (error) {
@@ -62,6 +70,24 @@ export default function Game() {
       if (!word.startsWith(lastLetter)) {
         throw new Error("La palabra no respeta la cadena.");
       }
+    };
+
+    const handleGameOver = () => {
+      setGameOver(true);
+    };
+
+    const { timeLeft, resetTimer } = useTimer({
+      initialTime: 15,
+      isRunning,
+      onFinish: handleGameOver,
+    });
+
+    const resetGame = () => {
+      setWords([]);
+      setScore(0);
+      setError(null);
+      setGameOver(false);
+      resetTimer();
     };
     
     return (
@@ -105,7 +131,7 @@ export default function Game() {
           <GameOver
             score={score}
             wordsCount={words.length}
-            onRestart={() => {}}
+            onRestart={resetGame}
           />
         )}
 
