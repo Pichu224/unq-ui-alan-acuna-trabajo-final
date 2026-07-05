@@ -3,14 +3,14 @@ import { useState } from "react";
 import Score from "./score.tsx";
 import Timer from "./timer.tsx";
 import WordInput from "./wordInput.tsx";
-//import WordChain from "./wordChain.tsx";
-//import GameOver from "./gameOver.tsx";
+import WordChain from "./wordChain.tsx";
+import GameOver from "./gameOver.tsx";
 
 export default function Game() {
 
     const [score] = useState(0);
     const [timeLeft] = useState(15);
-    const [words] = useState<String[]>([]);
+    const [words] = useState<string[]>([]);
     const [error] = useState<String | null>(null);
     const [gameOver] = useState(false);
 
@@ -47,10 +47,10 @@ export default function Game() {
           </div>
         )}
 
-        {/* CHAIN 
+        {/* CHAIN */}
         <WordChain words={words} />
-            */}
-        {/* GAME OVER 
+            
+        {/* GAME OVER */}
         {gameOver && (
           <GameOver
             score={score}
@@ -58,7 +58,7 @@ export default function Game() {
             onRestart={() => {}}
           />
         )}
-          */}
+
       </div>
     </div>
   );
