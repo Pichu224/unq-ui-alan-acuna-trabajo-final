@@ -10,6 +10,7 @@ export default function GameScreen({
   error,
   timeLeft,
   onSubmit,
+  disabled,
 }: GameViewProps) {
   return (
     <div className="w-full max-w-2xl bg-white rounded-2xl shadow-xl p-6 space-y-6">
@@ -31,7 +32,7 @@ export default function GameScreen({
       </div>
 
       {/* INPUT */}
-      <WordInput onSubmit={onSubmit} />
+      <WordInput onSubmit={onSubmit} disabled={disabled} />
 
       {/* ERROR */}
       {error && (

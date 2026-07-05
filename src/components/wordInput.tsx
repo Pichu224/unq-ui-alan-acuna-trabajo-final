@@ -20,7 +20,7 @@ export default function WordInput({ onSubmit, disabled }: WordInputProps) {
                 disabled={disabled}
                 onChange={(e) => setValue(e.target.value)}
                 onKeyDown={(e) => {
-                    if(e.key == "Enter") handleSubmit();
+                    if(e.key === "Enter") handleSubmit();
                 }}
             />
             <button

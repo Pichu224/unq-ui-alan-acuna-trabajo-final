@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import wordService from "../services/wordService.ts";
 import normalizeWord from "../utils/normalizedWord.ts";
 import useTimer from "../hooks/useTimer.tsx"
@@ -69,9 +69,9 @@ export default function Game() {
       }
     };
 
-    const handleGameOver = () => {
+    const handleGameOver = useCallback(() => {
       setGameOver(true);
-    };
+    }, []);
 
     const { timeLeft, resetTimer } = useTimer({
       initialTime: 15,
@@ -102,8 +102,7 @@ export default function Game() {
             error={error}
             timeLeft={timeLeft}
             onSubmit={handleWordSubmit}
-            resetTimer={resetTimer}
-            onGameOver={handleGameOver}
+            disabled={false}
           />
         )}
     </div>
