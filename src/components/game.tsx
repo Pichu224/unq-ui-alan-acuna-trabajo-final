@@ -88,7 +88,7 @@ export default function Game() {
     };
     
     return (
-      <div className="min-h-screen bg-slate-100 flex items-center justify-center p-6">
+      <div className="min-h-screen bg-slate-100 flex items-center justify-center p-3 sm:p-4 md:p-6 py-4 sm:py-6 md:py-8">
         {gameOver ? (
           <GameOverView
             score={score}
