@@ -56,7 +56,7 @@ export default function useGame(playerName: string) {
   };
 
   const handleWordSubmit = async (word: string) => {
-    if (gameOverRef.current) return;
+    if (gameOverRef.current) return false;
 
     try {
       const normalizedWord = normalizeWord(word);
@@ -65,19 +65,21 @@ export default function useGame(playerName: string) {
       validateRepeatedWord(normalizedWord);
       validateWordChain(normalizedWord);
 
-      if (gameOverRef.current) return;
+      if (gameOverRef.current) return false;
 
       setWords((previous) => [...previous, normalizedWord]);
       setScore((previous) => previous + normalizedWord.length);
 
       resetTimer();
       setError(null);
+      return true;
     } catch (error) {
       setError(
         error instanceof Error
           ? error.message
           : "Ocurrió un error inesperado."
       );
+      return false;
     }
   };
 

@@ -4,11 +4,14 @@ import type { WordInputProps } from "../types/wordInputProps";
 export default function WordInput({ onSubmit, disabled }: WordInputProps) {
     const [value, setValue] = useState("");
 
-    const handleSubmit = () => {
-        if (!value.trim()) return;
+    const handleSubmit = async () => {
+        const trimmedValue = value.trim();
+        if (!trimmedValue) return;
 
-        onSubmit(value);
-        setValue("");
+        const accepted = await onSubmit(trimmedValue);
+        if (accepted) {
+            setValue("");
+        }
     }
 
     return (

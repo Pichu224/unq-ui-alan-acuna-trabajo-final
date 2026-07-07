@@ -1,4 +1,4 @@
 export type WordInputProps = {
-    onSubmit: (word : string) => void;
+    onSubmit: (word: string) => Promise<boolean> | boolean;
     disabled?: boolean;
 }

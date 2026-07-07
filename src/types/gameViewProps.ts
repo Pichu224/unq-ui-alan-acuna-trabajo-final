@@ -3,6 +3,6 @@ export type GameViewProps = {
   words: string[];
   error: string | null;
   timeLeft: number;
-  onSubmit: (word: string) => void;
+  onSubmit: (word: string) => Promise<boolean> | boolean;
   disabled?: boolean;
 };
