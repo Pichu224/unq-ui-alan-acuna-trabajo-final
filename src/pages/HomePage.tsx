@@ -1,14 +1,13 @@
 import PageCard from "../components/pageCard";
+import PageLayout from "../components/pageLayout";
 import HomeView from "../views/HomeView";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-slate-100 flex items-center justify-center p-6">
-
+    <PageLayout>
       <PageCard className="max-w-xl">
         <HomeView />
       </PageCard>
-
-    </div>
+    </PageLayout>
   );
 }

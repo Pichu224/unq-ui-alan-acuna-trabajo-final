@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
 import type { LeaderboardEntry } from "../types/leaderBoardProps";
-import storageService from "../services/storageBoardService";
+import storageBoardService from "../services/storageBoardService";
 import { useState, useEffect } from "react";
 
 export default function LeaderboardView() {
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
 
   useEffect(() => {
-    setLeaderboard(storageService.getLeaderboard());
+    setLeaderboard(storageBoardService.getLeaderboard());
   }, []);
 
   return (
@@ -29,7 +29,7 @@ export default function LeaderboardView() {
               <tr>
                 <th className="p-2 text-left">Jugador</th>
                 <th className="p-2 text-left">Puntos</th>
-                <th className="p-2 text-left">Palabras</th>
+                <th className="p-2 text-left">Cantidad de Palabras</th>
               </tr>
             </thead>
 

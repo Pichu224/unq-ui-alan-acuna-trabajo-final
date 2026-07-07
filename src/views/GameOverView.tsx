@@ -1,7 +1,6 @@
 
 import { Link } from "react-router-dom";
 import type { GameOverViewProps } from "../types/gameOverViewProps";
-import GameOver from "../components/gameOver";
 import WordChain from "../components/wordChain";
 
 export default function GameOverView({
@@ -12,10 +11,14 @@ export default function GameOverView({
   return (
     <div className="w-full space-y-6">
 
-      <GameOver
-        score={score}
-        wordsCount={words.length}
-      />
+      <div className="text-center space-y-2">
+        <h2 className="text-2xl font-bold text-red-600">
+          Fin de la partida
+        </h2>
+
+        <p>Puntaje final: <strong>{score}</strong></p>
+        <p>Palabras: <strong>{words.length}</strong></p>
+      </div>
 
       <div className="flex gap-3">
         <button

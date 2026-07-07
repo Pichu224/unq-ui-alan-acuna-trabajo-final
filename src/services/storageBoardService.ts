@@ -6,7 +6,7 @@ import type {
 const STORAGE_KEY = "leaderboard";
 const MAX_LEADERBOARD_SIZE = 10;
 
-const storageLeaderBoardService = {
+const storageBoardService = {
 
   getLeaderboard: (): LeaderboardEntry[] => {
     const leaderboard = localStorage.getItem(STORAGE_KEY);
@@ -51,12 +51,12 @@ const storageLeaderBoardService = {
       createdAt: Date.now(),
     };
 
-    const leaderboard = storageLeaderBoardService.sortLeaderboard([
-      ...storageLeaderBoardService.getLeaderboard(),
+    const leaderboard = storageBoardService.sortLeaderboard([
+      ...storageBoardService.getLeaderboard(),
       newEntry,
     ]);
 
-    storageLeaderBoardService.saveLeaderboard(leaderboard);
+    storageBoardService.saveLeaderboard(leaderboard);
 
     return leaderboard;
   },
@@ -67,4 +67,4 @@ const storageLeaderBoardService = {
 
 };
 
-export default storageLeaderBoardService;
+export default storageBoardService;
